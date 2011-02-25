@@ -24,8 +24,6 @@ var argv = require('optimist')
 			.usage('Usage: $0 opts') 
 			.argv;
 
-//https://github.com/nodejitsu/node-http-proxy			
-			
 /* Configurations */
 mime.define({'application/xml': ['xml', 'asmx', 'ashx']});
 mime.default_type = mime.types[argv.defaultmime];

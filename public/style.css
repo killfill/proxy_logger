@@ -1,0 +1,204 @@
+
+
+.tooltip {
+	border-bottom: 1px dotted #000000; color: #000000; outline: none;
+	cursor: help; text-decoration: none;
+	position: relative;
+}
+.tooltip table {
+	font-size: 11px;
+}
+.tooltip span table th {
+	padding-right: 9px;
+	text-align: left;
+}
+.tooltip img {
+	padding-right: 10px;
+	cursor: hand; 
+}
+.tooltip span {
+	margin-left: -999em; 
+	position: absolute; 
+	left: 0em; 
+	top: 0em; 
+	z-index: 99;
+	font-size: 12;
+	border-radius: 5px 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; 
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5); -webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.1); -moz-box-shadow: 5px 5px rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	-webkit-transition: .5s opacity;
+	-webkit-transition: .3s left;
+	-webkit-transition: .2s top;
+	padding: 0.8em 1em; 
+	background: lightgray; border: 1px solid black; 
+	white-space:nowrap;
+}
+.tooltip:hover span {
+	left: 2em; 
+	top: 1em; 
+	opacity: 1;
+	margin-left: 0em; 
+}
+body {
+	//background-color: #f3f3f3;
+	background:#FAF0D9;
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, FreeSerif, serif;
+}
+#status {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 40px;
+}
+.time {
+	font-size: 12px;
+	font-style: italic;
+	color: #444;
+}
+.origin {
+	text-transform: none;
+	color: #14cf8b;
+}
+.dest {
+	color: #1f75de !important;
+	font-variant: small-caps;
+	font-style: normal;
+	font-weight: normal;
+	letter-spacing: 1px;
+	white-space:nowrap;
+}
+.dest a {
+	color: #1f75de;
+	text-decoration: none;
+}
+.result {
+	color: #b041e8;
+	font-variant: small-caps;
+	text-transform: lowercase;
+	font-size: 11px;
+	white-space:nowrap;
+}
+
+.size {
+	font-variant: normal;
+	font-size: 11px;
+	white-space:nowrap;
+}
+.took {
+	font-size: 11px;
+	white-space:nowrap;
+}
+.mime {
+	font-size: 11px;
+	color: green;
+	font-variant: small-caps;
+	font-weight: bold;
+}
+#logs {
+	width: 100%;
+}
+#logs td{
+	padding-right: 10px;
+	padding-bottom: 3px;
+}
+#logs .odd  {
+	background-color: #EaEaEa;
+}
+.toolbar {
+	margin-bottom: 8px;
+	padding-bottom: 2px;
+	border-bottom: 4px solid #C2A72B !important;
+	width: 90%;
+}
+button {
+	-webkit-border-radius:5px;
+	-webkit-box-shadow:0px 0px 2px rgba(0,0,0,0.4);
+	color:rgba(0,0,0,0.9);
+	text-shadow:1px 1px 0px rgba(255,255,255,0.8);
+	border:1px solid rgba(0,0,0,0.5);
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(rgba(255,255,255,1)),to(rgba(185,185,185,1)));
+	padding:5px;
+}
+button:hover {
+	background:rgba(240,240,240,1);
+}
+button:active, button:focus {
+	background:-webkit-gradient(linear,0% 100%,0% 0%,from(rgba(255,255,255,1)),to(rgba(185,185,185,1)));
+}
+button:disabled {
+	color:rgba(0,0,0,0.4);
+	text-shadow:1px 1px 0px rgba(255,255,255,0.5);
+	background:rgba(220,220,220,1);
+}
+
+
+.window {
+	z-index: -100;
+	padding: 1em;
+	margin: 20px;
+	-webkit-transition: .5s;
+	opacity: 0;
+	position: absolute;
+	left: 160px;
+	top: -25px;	
+}
+
+.show {
+	opacity: 1;
+	left: 250px;
+	top: 40px;	
+	z-index:100;
+	background: white; border: 1px solid black; 
+}
+
+select {
+	-webkit-box-shadow:0px 0px 2px rgba(0,0,0,0.4);
+	text-shadow:1px 1px 0px rgba(255,255,255,0.8);
+	border:1px solid rgba(0,0,0,0.5);
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(rgba(255,255,255,1)),to(rgba(185,185,185,1)));
+	font-size:12px;	
+	
+}
+
+
+.window h1 {
+	margin: 0px;
+	text-align: right;
+	text-shadow:1px 1px 0px lightgray;
+	font-size: 14px;
+	color: blue;
+	margin-top: -6px;
+	font-variant: small-caps;
+	letter-spacing: 3px;
+	border-bottom: 1px solid #C2A72B !important;
+	margin-bottom: 6px;
+	
+}
+
+
+#statsContent {
+	border-top: 1px solid black !important;
+	margin-top: 10px;
+}
+
+
+.drop-shadow { 
+    padding:1em; 
+    margin:2em 10px 4em; 
+    background:#fff;
+    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+       -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+.drop-shadow:before,
+.drop-shadow:after {
+    content:"";
+    position:absolute; 
+    z-index:-2;
+}
+
+.drop-shadow p {
+    font-size:16px;
+    font-weight:bold;
+}

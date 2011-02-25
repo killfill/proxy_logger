@@ -1,0 +1,54 @@
+<html>
+<head>
+
+	<title>Proxy Logger</title>
+	<link href='style.css' rel='stylesheet' />
+	<script src='/socket.io/socket.io.js'></script>
+	<script src='script.js'></script>
+	<script src='prettyPrint.js'></script>
+</head>
+
+<body onload='app.init()'>
+
+<div class='toolbar'>
+	<button onclick='app.clean()'>Clean</button>
+	<button id='pause'  onclick='app.togglePause();'>Pause</button>
+	<button id='play'   onclick='app.togglePause();' disabled=true>Play</button>
+	<button id='filter' onclick='app.toggleFilter();' >Filter</button>
+	<button id='stats'  onclick='app.toggleStats();'>Stats</button>
+</div>
+
+<div id='filterWindow' class='window'>
+	<h1>Filter</h1>
+	By
+	<select id='filterKey'>
+	<option>remoteAddress</option>
+	<option>url</option>
+	<option>statusCode</option>
+	</select>
+	with value
+	<input type=text id='filterValue'></text>
+	<button onclick='app.toggleFilter();'>Ok</button>
+</div>
+
+<div id='statsWindow' class='window'>
+	<h1>Statistics</h1>
+	Group by 
+	<select id='statsKey'>
+	<option>soapaction</option>
+	<option>host</option>
+	<option>user-agent</option>
+	<option>content-type</option>
+	</select>
+	<button onclick='app.statsStart()'>Calculate</button>
+	<br/>
+	<div id='statsContent'></div>
+</div>
+
+<img id='status'/>
+<table id='logs'>
+
+</table>
+
+</body>
+</html>

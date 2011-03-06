@@ -44,3 +44,5 @@ When moving the mouse over the green arrows, you will see the http headers. When
 
 Proxy_logger was quickly made to help the team have visibility about whats going on. If you hate it, love it or just use it, please tell!!..
 
+It requires node.js with socket.io and mime.
+

@@ -13,7 +13,7 @@ What could do you do?
   Problem -> The xml string you get is not exactly the one that get passed throught.
 
 * Use socat with verbose or something similar and let it print the message to the terminal.
-  Problem -> If your not on a unix mashine, you will need to have a remote user/pass to one. Not all people are good with or like terminals.  Pluse, you need to manually separate the request and response and copy/paste them to separate files.
+  Problem -> If your not on a unix mashine, you will need to have a remote user/pass to one. Not all people are good with or like terminals.  Plus, you need to manually separate the request and response and copy/paste them to separate files.
              
 * Use tcpmon.
   Problem -> It gets slow when working with big xml data.
@@ -33,7 +33,7 @@ Execute it on a server.
 By default it will start the http proxy on port 9099, and the control port on 8099.
 Now, you can configure your client to use it. For example when running  <pre> curl --proxy http://localhost:9099 http://google.com </pre> or when invoking a remote soap web service throught proxy_logger, you will see something like this: 
 
-<img href = "http://i.imgur.com/oJaMs.png" />
+<img src = "http://i.imgur.com/oJaMs.png" />
 
 The yellow bulb shows your connected. For each request you see the time and date it was thrown, the kbytes and seconds it took getting the response. The mime type and finally the html verb and url.
 When moving the mouse over the green arrows, you will see the http headers. When clicking the arrows, a new tab will open in the browser with the content. You can just save it to file with Ctl+s and drop it in a mail to someone.

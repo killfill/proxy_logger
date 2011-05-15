@@ -21,6 +21,10 @@ What could do you do?
 Now you can use proxy_logger. Its handy becouse it can open each request or response in a new tab in the browser. 
 If you install a xml formatter, you can easily interact with the content.
 
+# TODO
+
+* memory.js line 24: Could apply hands-on-node page 59 to async write to the file.
+* app.js    line 83: Rewrite
 
 # Usage 
 

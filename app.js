@@ -4,11 +4,11 @@ var http = require('http'),
 	fs = require('fs'),
 	mime = require('mime'),
 	io = require('socket.io'),
-	proxy = require('./proxy'),
-	memory = require('./memory'),
-	_ = require('./extensions.js'),
-	helper = require('./helper.js').helper,
-	logger = require('./logger');
+	proxy = require('./lib/proxy'),
+	memory = require('./lib/memory'),
+	_ = require('./lib/extensions.js'),
+	helper = require('./lib/helper.js').helper,
+	logger = require('./lib/logger');
 
 var argv = require('optimist')
 			.default('control', 8099)
@@ -75,7 +75,13 @@ var controlServer = http.createServer(function(req, res){
 
 
 controlServer.listen(argv.control);
-var socket = io.listen(controlServer);
+
+
+var socketOptions = {
+	transports: [ 'websocket', /*'flashsocket'*/, 'htmlfile', 'xhr-multipart', 'xhr-polling']
+};
+
+var socket = io.listen(controlServer, socketOptions);
 
 socket.on('connection', function(client) {
 

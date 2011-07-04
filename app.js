@@ -11,18 +11,18 @@ var http = require('http'),
 	logger = require('./lib/logger');
 
 var argv = require('optimist')
-			.default('control', 8099)
-			.default('port', 9099)
-			.default('proxyhost', false)
-			.default('proxyport', 8080)
-			.default('defaultmime', 'xml')
-			.default('logconsole', 'true')
-			.default('logfile', 'true')
+	.default('control', 8099)
+	.default('port', 9099)
+	.default('proxyhost', false)
+	.default('proxyport', 8080)
+	.default('defaultmime', 'xml')
+	.default('logconsole', 'true')
+	.default('logfile', 'true')
 
-			.default('remember', 4000)
-			.default('sendlasttime', 1000*3*60*60)
-			.usage('Usage: $0 opts') 
-			.argv;
+	.default('remember', 4000)
+	.default('sendlasttime', 1000*3*60*60)
+	.usage('Usage: $0 opts') 
+	.argv;
 
 /* Configurations */
 mime.define({'application/xml': ['xml', 'asmx', 'ashx']});

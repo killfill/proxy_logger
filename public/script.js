@@ -20,53 +20,66 @@ String.prototype.format = function(hash) {
 }
 
 app = {
-	init: function() {
+  init: function() {
 		app.statusEl= $('status');
 		app.logsEl = $('logs');
-		app.setStatus(false);
 		app.initSocket();
 	},
 	
-	clean: function() {
+  clean: function() {
 		app.logsEl.innerHTML='';
 	},
 
+  initSocket: function() {
+    app.io = io.connect();
+    app.io.on('connect', app.onConnect);
+    app.io.on('disconnect', app.onDisconnect);
 
-	initSocket: function() {
-		app.io = new io.Socket();
-		app.io.on('connect', app.onConnect);
-		app.io.on('disconnect', app.onDisconnect);
-		app.io.on('message', app.onMessage);
-		app.io.connect();
-	},
+    app.io.on('buffer', app.onBuffer);
+    app.io.on('request', app.onRequestMsg);
+    app.io.on('response', app.onResponseMsg);
+    app.io.on('error', app.onErrorMsg);
+    //app.io.on('message', app.onMessage);
+ 
+    app.getBuffer();
 
-	onConnect: function() {
-		app.setStatus(true);
-	},
+  },
 
-	sleep: {min: 1, max: 10, current: 0},
-	onDisconnect: function() {
-		app.setStatus(false);
-		setTimeout(function() {
-			if (app.io.connected || app.io.connecting)
-				return;
-			if (app.sleep.current<app.sleep.max)
-				app.sleep.current += 1;
-			app.io.connect();
-			setTimeout(arguments.callee, app.sleep.current*1000)
-		}, app.sleep.min);
-	},
+  //I want some buffer
+  getBuffer: function() {
+    $('toolbar').style.opacity=0;
+    $('loginWindow').style.opacity=100;
 
-	setStatus: function(bool) {
-		app.statusEl.src = bool? 'img/online.png': 'img/offline.png';
-	},
+    app.io.emit('send buffer', {count: 10}, function(data) {
 
-	pause: false,
-	togglePause: function() {
-		app.pause = !app.pause;
-		$('pause').disabled = app.pause;
-		$('play').disabled = !app.pause;
-	},
+      $('toolbar').style.opacity=100;
+      $('loginWindow').style.opacity=0;
+      console.log('onBufferzzzz: ', data);
+
+    });
+  },
+
+  //Triggers when connection is alive
+  onConnect: function() {
+    app.isOnline(true);
+  },
+
+  //Triggers when connection is not alive
+  onDisconnect: function() {
+    app.isOnline();
+  },
+
+  isOnline: function(bool) {
+    app.statusEl.src = bool? 'img/online.png': 'img/offline.png';
+  },
+
+  //Let it stop receiving messages
+  pause: false,
+  togglePause: function() {
+    app.pause = !app.pause;
+    $('pause').disabled = app.pause;
+    $('play').disabled = !app.pause;
+  },
 	
 	toggleFilter: function() {	
 		var hidden = $('filterWindow').className.indexOf('show') <0 ;
@@ -97,8 +110,8 @@ app = {
 		if (app.pause || app.filter(msg)) return;
 		
 		//present repeated msg's.
-		if (msg.state=='request' && msg.id != null && msg.id <= app.lastRequestId)
-			return;
+		//if (msg.state=='request' && msg.id != null && msg.id <= app.lastRequestId)
+		//	return;
 			
 		app[msg.state+'Event'](msg);
 	},
@@ -108,33 +121,17 @@ app = {
 		app.responseEvent(msg);
 	},
 	
-	statsEvent: function(msg) {
-		var html = prettyPrint(msg.data);
-		msg.humanDate = helper.humanTime(new Date(msg.date));
-		msg.firstHuman = helper.humanDateTime(new Date(msg.first));
-		msg.lastHuman = helper.humanDateTime(new Date(msg.last));
-		
-		var csv = [[$('statsKey').value, 'Total', 'Avg', 'Std']];
-		csv.push(['All', msg.total, '100', '']);
-		for (var k in msg.data) {
-			if (!msg.data.hasOwnProperty(k)) return;
-			csv.push([k, msg.data[k].total, msg.data[k].avg, msg.data[k].std])
-		}
-		csv = helper.array2Csv(csv).replace(/"/g, '');
-
-		$('statsContent').innerHTML = "<div style='width: 100%'>[{humanDate}]  <b>Total</b> {total}, <b>from</b> {firstHuman} <b>to</b> {lastHuman}  &nbsp;&nbsp;&nbsp; <img src='img/csv.png' style='float: right' onclick=\" helper.openNewWindow(\'".format(msg) + csv + "\'); return false;\" /></div>" + html.innerHTML;
-	},
 	
-	lastRequestId: 0,
-	requestEvent: function(msg) {
-		if ($('download_'+msg.id)!=null) return; //this happends when client stays still, and server restarts
+	//lastRequestId: 0,
+	onRequestMsg: function(msg) {
+		//if ($('download_'+msg.id)!=null) return; //this happends when client stays still, and server restarts
 		
 		var html = build.requestMsg(msg);
 		app.logsEl.insertBefore(html, app.logsEl.firstChild);
-		app.lastRequestId = msg.id;
+		//app.lastRequestId = msg.id;
 	},
 	
-	responseEvent: function(msg) {
+	onResponseMsg: function(msg) {
 	
 		var tr = $(msg.id);
 		
@@ -156,7 +153,23 @@ app = {
 		tooltip.innerHTML = build.tooltip(msg);
 	
 		$('state_'+msg.id).src= msg.statusCode == 200 && !msg.response.isSoapFault ? 'img/ok.png' : 'img/error.png';
-	}	
+	},
+	statsEvent: function(msg) {
+		var html = prettyPrint(msg.data);
+		msg.humanDate = helper.humanTime(new Date(msg.date));
+		msg.firstHuman = helper.humanDateTime(new Date(msg.first));
+		msg.lastHuman = helper.humanDateTime(new Date(msg.last));
+		
+		var csv = [[$('statsKey').value, 'Total', 'Avg', 'Std']];
+		csv.push(['All', msg.total, '100', '']);
+		for (var k in msg.data) {
+			if (!msg.data.hasOwnProperty(k)) return;
+			csv.push([k, msg.data[k].total, msg.data[k].avg, msg.data[k].std])
+		}
+		csv = helper.array2Csv(csv).replace(/"/g, '');
+
+		$('statsContent').innerHTML = "<div style='width: 100%'>[{humanDate}]  <b>Total</b> {total}, <b>from</b> {firstHuman} <b>to</b> {lastHuman}  &nbsp;&nbsp;&nbsp; <img src='img/csv.png' style='float: right' onclick=\" helper.openNewWindow(\'".format(msg) + csv + "\'); return false;\" /></div>" + html.innerHTML;
+	},
 };
 
 build = {

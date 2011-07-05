@@ -10,7 +10,7 @@
 
 <body onload='app.init()'>
 
-<div class='toolbar'>
+<div id='toolbar' class='toolbar'>
 	<button onclick='app.clean()'>Clean</button>
 	<button id='pause'  onclick='app.togglePause();'>Pause</button>
 	<button id='play'   onclick='app.togglePause();' disabled=true>Play</button>
@@ -29,6 +29,10 @@
 	with value
 	<input type=text id='filterValue'></text>
 	<button onclick='app.toggleFilter();'>Ok</button>
+</div>
+
+<div id='loginWindow' class='window'>
+  <h1>Waiting for server...</h1>
 </div>
 
 <div id='statsWindow' class='window'>

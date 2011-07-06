@@ -1,6 +1,6 @@
 { "name": "proxy_logger"
 , "description": "Proxy tool that let you see http content passing through"
-, "version": "0.0.1"
+, "version": "0.2.0"
 , "author": "Phillip Neumann <pneumann@gmail.com>"
 , "engines": { "node": "~0.4.x" }
 , "main": "./run.js"
@@ -8,5 +8,6 @@
      "mime": "*"
    , "socket.io": "*"
    , "optimist": "*"
+   , "express": "*"
   }
 }

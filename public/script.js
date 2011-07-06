@@ -37,7 +37,6 @@ app = {
 
     app.io.on('request', app.onRequestMsg);
     app.io.on('response', app.onResponseMsg);
-    app.io.on('error', app.onErrorMsg);
  
     app.getBuffer();
   },
@@ -98,10 +97,6 @@ app = {
     if (val.length<1) return false;
     
     return msg[key].indexOf(val)==-1
-  },
-  
-  errorEvent: function(msg) {
-    app.responseEvent(msg);
   },
   
   onRequestMsg: function(msg) {

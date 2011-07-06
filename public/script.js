@@ -21,14 +21,14 @@ String.prototype.format = function(hash) {
 
 app = {
   init: function() {
-		app.statusEl= $('status');
-		app.logsEl = $('logs');
-		app.initSocket();
-	},
+    app.statusEl= $('status');
+    app.logsEl = $('logs');
+    app.initSocket();
+  },
 	
   clean: function() {
-		app.logsEl.innerHTML='';
-	},
+    app.logsEl.innerHTML='';
+  },
 
   initSocket: function() {
     app.io = io.connect();
@@ -42,19 +42,25 @@ app = {
     //app.io.on('message', app.onMessage);
  
     app.getBuffer();
-
   },
 
   //I want some buffer
   getBuffer: function() {
-    $('toolbar').style.opacity=0;
-    $('loginWindow').style.opacity=100;
+    var tbar = $('toolbar')
+      , loginWin = $('loginWindow');
 
-    app.io.emit('send buffer', {count: 10}, function(data) {
+    tbar.className = 'hide';
+    loginWin.className = 'window drop-shadow show';
 
-      $('toolbar').style.opacity=100;
-      $('loginWindow').style.opacity=0;
-      console.log('onBufferzzzz: ', data);
+    app.io.emit('send buffer', {count: 15}, function(data) {
+
+      data.info.forEach(function(n) {
+        app.onRequestMsg(n);
+        app.onResponseMsg(n);
+      });
+
+      tbar.className = 'toolbar';
+      loginWin.className = 'hide';
 
     });
   },
@@ -117,43 +123,48 @@ app = {
 	},
 	
 	errorEvent: function(msg) {
-		app.requestEvent(msg);
-		app.responseEvent(msg);
+		//app.requestEvent(msg);
+		//app.responseEvent(msg);
+		console.log(':(');
 	},
 	
 	
-	//lastRequestId: 0,
-	onRequestMsg: function(msg) {
-		//if ($('download_'+msg.id)!=null) return; //this happends when client stays still, and server restarts
-		
-		var html = build.requestMsg(msg);
-		app.logsEl.insertBefore(html, app.logsEl.firstChild);
-		//app.lastRequestId = msg.id;
-	},
+  //lastRequestId: 0,
+  onRequestMsg: function(msg) {
+    if (app.pause || app.filter(msg)) return;
+    var html = build.requestMsg(msg);
+    app.logsEl.insertBefore(html, app.logsEl.firstChild);
+    //app.lastRequestId = msg.id;
+  },
 	
-	onResponseMsg: function(msg) {
+  onResponseMsg: function(msg) {
+    if (app.pause || app.filter(msg)) return;
 	
-		var tr = $(msg.id);
+    var tr = $(msg.id);
 		
-		if (tr==null) {
-			console.log('hmm...', msg);
-			return;
-		}
-		var down = tr.getElementsByClassName('download')[0].children[0];
-		down.children[1].innerHTML = build.tooltip(msg.response, true);
-		var downImg = down.children[0];
-		downImg.src = 'img/download.png';
-		downImg.onclick = function() {window.open(msg.response._fileName); return false};
-		
-		tr.getElementsByClassName('took')[0].innerText = msg.took+ ' s';
-		tr.getElementsByClassName('size')[0].innerText = msg.response.size+ ' KB';
-		tr.getElementsByClassName('result')[0].innerText = "{statusCodeDescr} ({statusCode})".format(msg);
+    if (tr==null) {
+      console.log('hmm... wheres the el of ', msg.id, msg);
+      return;
+    }
 
-		var tooltip = tr.getElementsByClassName('dest')[0].children[0].children[0];
-		tooltip.innerHTML = build.tooltip(msg);
+    var down = tr.getElementsByClassName('download')[0].children[0];
+    down.children[1].innerHTML = build.tooltip(msg.response, true);
+
+    var downImg = down.children[0];
+    downImg.src = 'img/download.png';
+    downImg.onclick = function() {window.open(msg.response._fileName); return false};
+		
+    tr.getElementsByClassName('took')[0].innerText = msg.response.took+ ' s';
+    tr.getElementsByClassName('size')[0].innerText = msg.response.size+ ' KB';
+    tr.getElementsByClassName('result')[0].innerText = "{statusCodeDesc} ({statusCode})".format(msg);
+
+    var tooltip = tr.getElementsByClassName('dest')[0].children[0].children[0];
+    tooltip.innerHTML = build.tooltip(msg);
 	
-		$('state_'+msg.id).src= msg.statusCode == 200 && !msg.response.isSoapFault ? 'img/ok.png' : 'img/error.png';
-	},
+    $('state_'+msg.id).src= msg.statusCode == 200 && !msg.response.isSoapFault ? 'img/ok.png' : 'img/error.png';
+
+  },
+
 	statsEvent: function(msg) {
 		var html = prettyPrint(msg.data);
 		msg.humanDate = helper.humanTime(new Date(msg.date));

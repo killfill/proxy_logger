@@ -101,8 +101,7 @@ app = {
   },
   
   errorEvent: function(msg) {
-    //app.responseEvent(msg);
-    console.log(':(');
+    app.responseEvent(msg);
   },
   
   onRequestMsg: function(msg) {
@@ -129,9 +128,9 @@ app = {
     downImg.src = 'img/download.png';
     downImg.onclick = function() {window.open(msg.response._fileName); return false};
     
-    tr.getElementsByClassName('took')[0].innerText = msg.response.took+ ' s';
+    tr.getElementsByClassName('took')[0].innerText = msg.took+ ' s';
     tr.getElementsByClassName('size')[0].innerText = msg.response.size+ ' KB';
-    tr.getElementsByClassName('result')[0].innerText = "{statusCodeDesc} ({statusCode})".format(msg);
+    tr.getElementsByClassName('result')[0].innerHTML = "<span class='tooltip'>{statusCode}<span>{statusCodeDesc}</span></span>".format(msg);
 
     var tooltip = tr.getElementsByClassName('dest')[0].children[0].children[0];
     tooltip.innerHTML = build.tooltip(msg);
@@ -198,6 +197,8 @@ build = {
     msg.request._tooltip = build.tooltip(msg.request, true);
     msg.response._tooltip = build.tooltip(msg.response, true);
     msg._tooltip = build.tooltip(msg);
+    if (msg.request.size===0) msg.request.size = '0';
+    if (msg.request.took===0) msg.request.took = '0';
     build.requestIdx += 1;
     
     div.setAttribute('class', build.requestIdx%2 ? 'odd' : 'even');
@@ -234,7 +235,7 @@ var templates = {
         </span>\
       </td>\
           <td class='size'>{request.size} KB</td>\
-          <td class='took'>{took} s</td>\
+          <td class='took'>{request.took} s</td>\
       <td class='state'><img id='state_{id}' src='img/loading.gif' /></td>\
           <td class='result'></td>\
       <td class='mime'>{mimeTypeExtension}</td>\
